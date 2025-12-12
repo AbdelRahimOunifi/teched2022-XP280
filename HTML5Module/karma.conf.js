@@ -2,7 +2,7 @@ module.exports = function(config) {
 	"use strict";
 
 	config.set({
-        frameworks: ["ui5"],
+        frameworks: ["ui5"],
 		ui5: {
 			url: "https://sapui5.hana.ondemand.com"
 		},
@@ -30,12 +30,24 @@ module.exports = function(config) {
 			}
 		},
 		reporters: ["progress", "coverage"],
-
-        browsers: ["ChromiumHeadless"],
         
-        browserConsoleLogOptions: {
-			level: "error"
+        // **********************************************
+        // >>> START: REQUIRED FIX FOR CI/CD CONTAINER <<<
+        // **********************************************
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: 'ChromiumHeadless', // Use 'ChromiumHeadless' as defined by your environment
+                flags: ['--no-sandbox']   // Add the necessary flag to run in secure containers
+            }
         },
+        browsers: ["ChromeHeadlessNoSandbox"], // Reference the new custom launcher here
+        // **********************************************
+        // >>> END: REQUIRED FIX FOR CI/CD CONTAINER <<<
+        // **********************************************
+        
+        browserConsoleLogOptions: {
+			level: "error"
+        },
 
 		singleRun: true
 	});
